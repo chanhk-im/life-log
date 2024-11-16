@@ -1,8 +1,9 @@
 package com.chanhk.lifelog.controller;
 
 import com.chanhk.lifelog.dto.CreateRootNodeRequestDto;
-import com.chanhk.lifelog.dto.NodeRequestDto;
+import com.chanhk.lifelog.dto.CreateNodeRequestDto;
 import com.chanhk.lifelog.dto.NodeResponseDto;
+import com.chanhk.lifelog.dto.UpdateNodeRequestDto;
 import com.chanhk.lifelog.service.NodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class NodeController {
     }
 
     @PostMapping
-    public NodeResponseDto createNode(@RequestBody NodeRequestDto nodeDto) {
+    public NodeResponseDto createNode(@RequestBody CreateNodeRequestDto nodeDto) {
         System.out.println(21);
         return nodeService.createNode(nodeDto);
     }
@@ -37,6 +38,11 @@ public class NodeController {
     @GetMapping("/{nodeId}")
     public NodeResponseDto getNodeById(@PathVariable Long nodeId) {
         return nodeService.getNodeById(nodeId);
+    }
+
+    @PutMapping()
+    public NodeResponseDto updateNode(@RequestBody UpdateNodeRequestDto dto) {
+        return nodeService.updateNode(dto);
     }
 
     @DeleteMapping("/{nodeId}")

@@ -9,12 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class NodeRequestDto {
+public class UpdateNodeRequestDto {
+    private Long id;
     private String title;
     private String content;
-    private Long parentId;
-
-    public Node toEntity(Node parent) {
-        return Node.builder().title(title).content(content).parent(parent).isRoot(false).build();
-    }
 }

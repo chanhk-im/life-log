@@ -2,8 +2,9 @@ package com.chanhk.lifelog.service;
 
 import com.chanhk.lifelog.domain.Node;
 import com.chanhk.lifelog.dto.CreateRootNodeRequestDto;
-import com.chanhk.lifelog.dto.NodeRequestDto;
+import com.chanhk.lifelog.dto.CreateNodeRequestDto;
 import com.chanhk.lifelog.dto.NodeResponseDto;
+import com.chanhk.lifelog.dto.UpdateNodeRequestDto;
 import com.chanhk.lifelog.exception.NodeNotFoundException;
 import com.chanhk.lifelog.exception.ParentNodeNotFoundException;
 import com.chanhk.lifelog.exception.RootNodeAlreadyExistException;
@@ -25,7 +26,7 @@ public class NodeServiceImpl implements NodeService {
 
     @Override
     @Transactional
-    public NodeResponseDto createNode(NodeRequestDto dto) {
+    public NodeResponseDto createNode(CreateNodeRequestDto dto) {
         System.out.println(dto.getParentId());
         Node parent = nodeRepository.findById(dto.getParentId()).orElseThrow(ParentNodeNotFoundException::new);
         Node node = dto.toEntity(parent);
@@ -71,6 +72,23 @@ public class NodeServiceImpl implements NodeService {
         if (node.get().getParent() == null)
             return new NodeResponseDto(node.get(), 0L);
         return new NodeResponseDto(node.get(), node.get().getParent().getId());
+    }
+
+    @Override
+    @Transactional
+    public NodeResponseDto updateNode(UpdateNodeRequestDto dto) {
+        Node node = nodeRepository.findById(dto.getId()).orElseThrow(NodeNotFoundException::new);
+
+        if (dto.getTitle() != null) {
+            node.setTitle(dto.getTitle());
+        }
+        if (dto.getContent() != null) {
+            node.setContent(dto.getContent());
+        }
+
+        nodeRepository.save(node);
+        Long parentId = node.getParent().getId();
+        return new NodeResponseDto(node, parentId);
     }
 
     @Override
