@@ -54,8 +54,14 @@ public class NodeServiceImpl implements NodeService {
         List<NodeResponseDto> nodeList = new ArrayList<>();
         List<Node> nodes = nodeRepository.findAll();
         for (Node node: nodes) {
-            Long parentId = node.getParent().getId();
-            nodeList.add(new NodeResponseDto(node, parentId));
+            if (node.getIsRoot())
+                nodeList.add(new NodeResponseDto(node, 0L));
+            else {
+                Long parentId = node.getParent().getId();
+                nodeList.add(new NodeResponseDto(node, parentId));
+            }
+                
+
         }
 
         return nodeList;
